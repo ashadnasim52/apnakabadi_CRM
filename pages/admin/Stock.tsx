@@ -93,7 +93,10 @@ export const Stock = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {stockData.map((stock) => {
-                const currentRate = items.find(i => i.id === stock.itemId)?.rate || 0;
+                const stockItemDef = items.find(i => i.id === stock.itemId);
+                const currentRate = stockItemDef?.rate || 0;
+                const isVehicle = stockItemDef?.category === 'Vehicle' || (stockItemDef && /\b(vehicle|car|bike|truck)\b/i.test(stockItemDef.name) && !/battery/i.test(stockItemDef.name));
+                const unitStr = isVehicle ? 'units' : 'kg';
                 // Value is based on available stock * current market rate
                 const value = Math.max(0, stock.available) * currentRate;
                 
@@ -103,18 +106,18 @@ export const Stock = () => {
                     <td className="p-4 text-right">
                         <div className="flex items-center justify-end text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded w-fit ml-auto">
                             <ArrowDownLeft size={14} className="mr-1" />
-                            {stock.purchased.toFixed(2)} kg
+                            {isVehicle ? stock.purchased : stock.purchased.toFixed(2)} {unitStr}
                         </div>
                     </td>
                     <td className="p-4 text-right">
                         <div className="flex items-center justify-end text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded w-fit ml-auto">
                             <ArrowUpRight size={14} className="mr-1" />
-                            {stock.sold.toFixed(2)} kg
+                            {isVehicle ? stock.sold : stock.sold.toFixed(2)} {unitStr}
                         </div>
                     </td>
                     <td className="p-4 text-right">
                         <span className={`font-bold text-lg ${stock.available < 0 ? 'text-red-600' : 'text-slate-800'}`}>
-                            {stock.available.toFixed(2)} kg
+                            {isVehicle ? stock.available : stock.available.toFixed(2)} {unitStr}
                         </span>
                         {stock.available < 0 && (
                             <div className="text-xs text-red-500 flex items-center justify-end mt-1">

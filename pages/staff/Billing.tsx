@@ -69,14 +69,14 @@ export const Billing = () => {
   const isOthers = selectedItemData?.name === 'Others' || selectedItemData?.category === 'Others';
   const isVehicleItem = !!selectedItemData && (selectedItemData.category === 'Vehicle' || /\b(vehicle|car|bike|truck)\b/i.test(selectedItemData.name) && !/battery/i.test(selectedItemData.name));
   
-  // Rate Logic: Purchase = Fixed Admin Rate, Sale = Manual/Negotiated Rate (Default to Admin Rate)
-  const activeRate = transactionType === 'SALE' && manualRate !== ''
+  // Rate Logic: Purchase = Fixed Admin Rate, Sale = Manual/Negotiated Rate (Default to Admin Rate). Vehicles can always have manual amount
+  const activeRate = (transactionType === 'SALE' || isVehicleItem) && manualRate !== ''
     ? parseFloat(manualRate) 
     : (selectedItemData?.rate || 0);
 
-  const currentAmount = (parseFloat(weight) || 0) * activeRate;
+  const currentAmount = isVehicleItem ? activeRate : (parseFloat(weight) || 0) * activeRate;
   const totalAmount = billItems.reduce((sum, item) => sum + item.amount, 0);
-  const totalWeight = billItems.reduce((sum, item) => sum + (item.totalWeight || item.weight), 0);
+  const totalWeight = billItems.reduce((sum, item) => sum + (item.vehicleInfo ? 0 : (item.totalWeight || item.weight)), 0);
 
   // --- UNIFIED CONTACT SEARCH LOGIC ---
   const allContacts = useMemo(() => {
@@ -122,11 +122,18 @@ export const Billing = () => {
 
   const addItem = () => {
     if (!selectedItemId) return;
-    if (!weight || parseFloat(weight) <= 0) {
+    
+    if (!isVehicleItem && (!weight || parseFloat(weight) <= 0)) {
       setFormError('weight');
       weightInputRef.current?.focus();
       return;
     }
+    
+    if (isVehicleItem && activeRate <= 0) {
+      alert("Please enter the total vehicle amount.");
+      return;
+    }
+
     if (isOthers && !customName) {
       setFormError('customName');
       customNameRef.current?.focus();
@@ -147,7 +154,7 @@ export const Billing = () => {
       ? `Others (${customName})` 
       : (selectedItemData?.name || 'Unknown');
 
-    const weightVal = parseFloat(weight);
+    const weightVal = isVehicleItem ? 1 : parseFloat(weight);
 
     const newItem: BillItem = {
       id: Date.now().toString(),
@@ -390,7 +397,7 @@ export const Billing = () => {
                 <div className="grid grid-cols-12 gap-3 items-end">
                     
                     {/* Item Select */}
-                    <div className={`col-span-12 ${isOthers ? 'md:col-span-3' : 'md:col-span-4'}`}>
+                    <div className={`col-span-12 ${isOthers ? 'md:col-span-3' : (isVehicleItem ? 'md:col-span-6' : 'md:col-span-4')}`}>
                         <label className="block text-xs text-slate-600 mb-1 font-medium">Item Name</label>
                         <select 
                             ref={itemSelectRef}
@@ -427,14 +434,14 @@ export const Billing = () => {
                     )}
 
                     {/* Rate Input */}
-                    <div className={`col-span-6 ${isOthers ? 'md:col-span-2' : 'md:col-span-3'}`}>
-                        <label className="block text-xs text-slate-600 mb-1 font-medium">Rate (₹/kg)</label>
-                        {transactionType === 'SALE' ? (
+                    <div className={`${isVehicleItem ? 'col-span-12 md:col-span-4' : 'col-span-6'} ${isOthers && !isVehicleItem ? 'md:col-span-2' : (isVehicleItem ? '' : 'md:col-span-3')}`}>
+                        <label className="block text-xs text-slate-600 mb-1 font-medium">{isVehicleItem ? 'Total Amount (₹)' : 'Rate (₹/kg)'}</label>
+                        {transactionType === 'SALE' || isVehicleItem ? (
                             <input 
                             type="number" 
                             value={manualRate !== '' ? manualRate : (activeRate > 0 ? activeRate : '')}
                             onChange={e => setManualRate(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && weightInputRef.current?.focus()}
+                            onKeyDown={(e) => e.key === 'Enter' && (isVehicleItem ? {} : weightInputRef.current?.focus())}
                             placeholder={activeRate.toString()}
                             className="w-full p-3 bg-white text-slate-900 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-center"
                             />
@@ -446,24 +453,26 @@ export const Billing = () => {
                     </div>
 
                     {/* Weight Input */}
-                    <div className={`col-span-6 ${isOthers ? 'md:col-span-2' : 'md:col-span-3'}`}>
-                        <label className="block text-xs text-slate-600 mb-1 font-medium">Weight (Kg)</label>
-                        <input 
-                            ref={weightInputRef}
-                            type="number" 
-                            value={weight}
-                            onChange={e => {
-                                setWeight(e.target.value);
-                                if (formError === 'weight') setFormError(null);
-                            }}
-                            className={`w-full p-3 bg-white text-slate-900 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-lg text-center ${formError === 'weight' ? 'border-red-500 ring-2 ring-red-500' : 'border-slate-300'}`}
-                            placeholder="0.00"
-                            step="0.01"
-                            min="0"
-                            inputMode="decimal"
-                            onKeyDown={(e) => e.key === 'Enter' && (!isVehicleItem && addItem())}
-                        />
-                    </div>
+                    {!isVehicleItem && (
+                        <div className={`col-span-6 ${isOthers ? 'md:col-span-2' : 'md:col-span-3'}`}>
+                            <label className="block text-xs text-slate-600 mb-1 font-medium">Weight (Kg)</label>
+                            <input 
+                                ref={weightInputRef}
+                                type="number" 
+                                value={weight}
+                                onChange={e => {
+                                    setWeight(e.target.value);
+                                    if (formError === 'weight') setFormError(null);
+                                }}
+                                className={`w-full p-3 bg-white text-slate-900 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-lg text-center ${formError === 'weight' ? 'border-red-500 ring-2 ring-red-500' : 'border-slate-300'}`}
+                                placeholder="0.00"
+                                step="0.01"
+                                min="0"
+                                inputMode="decimal"
+                                onKeyDown={(e) => e.key === 'Enter' && (!isVehicleItem && addItem())}
+                            />
+                        </div>
+                    )}
 
                     {/* Add Button */}
                     <div className="col-span-12 md:col-span-2">
@@ -535,7 +544,7 @@ export const Billing = () => {
                                     <div className="flex-1">
                                         <div className="font-bold text-slate-800 text-sm truncate">{item.itemName}</div>
                                         <div className="text-xs text-slate-500 mb-1">
-                                            {item.totalWeight || item.weight} kg × ₹{item.rate}
+                                            {item.vehicleInfo ? 'Flat Amount' : `${item.totalWeight || item.weight} kg × ₹${item.rate}`}
                                         </div>
                                         {item.vehicleInfo && (
                                            <div className="text-[10px] text-slate-500 bg-slate-100 p-1 rounded inline-block mt-1">
@@ -580,8 +589,8 @@ export const Billing = () => {
                     )}
 
                     <div className="flex justify-between items-center mb-2">
-                        <span className="text-slate-600 font-medium">Total Weight</span>
-                        <span className="text-lg font-bold text-slate-700">{totalWeight.toFixed(2)} kg</span>
+                        <span className="text-slate-600 font-medium">Total Items / Weight</span>
+                        <span className="text-lg font-bold text-slate-700">{billItems.length} items / {totalWeight > 0 ? `${totalWeight.toFixed(2)} kg` : 'N/A'}</span>
                     </div>
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-slate-600 font-medium">Total Amount</span>

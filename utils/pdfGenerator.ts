@@ -166,13 +166,17 @@ export const generateBillPDF = (bill: Bill, company: CompanySettings, action: 'd
     doc.text(item.rate.toFixed(2), cols.rate, y, { align: 'right' });
     
     const itemWeight = item.totalWeight || item.weight;
-    doc.text(itemWeight.toFixed(2), cols.weight, y, { align: 'right' });
+    if (item.vehicleInfo) {
+        doc.text('Flat', cols.weight, y, { align: 'right' });
+    } else {
+        doc.text(itemWeight.toFixed(2), cols.weight, y, { align: 'right' });
+        totalWeight += itemWeight;
+    }
     
     doc.setFont('helvetica', 'bold');
     doc.text(item.amount.toFixed(2), cols.amount, y, { align: 'right' });
     doc.setFont('helvetica', 'normal');
 
-    totalWeight += itemWeight;
     y += rowHeight;
     
     // Light separator line
