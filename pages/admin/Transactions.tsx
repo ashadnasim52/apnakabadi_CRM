@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
-import { Download, Search, ArrowDownLeft, ArrowUpRight, FileText, Filter, X, Trash2 } from 'lucide-react';
-import { generateBillPDF } from '../../utils/pdfGenerator';
+import { Download, Search, ArrowDownLeft, ArrowUpRight, FileText, Filter, X, Trash2, Car } from 'lucide-react';
+import { generateBillPDF, generateScrapCertificate } from '../../utils/pdfGenerator';
 import { TransactionType } from '../../types';
 import { WhatsAppIcon } from '../../components/WhatsAppIcon';
 
@@ -57,7 +57,7 @@ export const Transactions = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-           <h1 className="text-2xl font-bold text-slate-800">All Transactions</h1>
+           <h1 className="text-xl md:text-2xl font-bold text-slate-800">All Transactions</h1>
            <p className="text-slate-500 mt-1">Manage and view all purchase and sales records</p>
         </div>
         <div className="bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm flex items-center">
@@ -131,7 +131,7 @@ export const Transactions = () => {
       {/* Table */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[1000px]">
+          <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
                 <th className="p-4 font-semibold">Bill No</th>
@@ -183,22 +183,36 @@ export const Transactions = () => {
                       ₹{bill.totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </td>
                   <td className="p-4 text-center">
-                    <div className="flex items-center justify-center space-x-2">
-                      <button 
-                        onClick={() => generateBillPDF(bill, company)}
-                        className="inline-flex items-center space-x-1 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg transition text-sm font-medium shadow-sm"
-                        title="Download PDF"
-                      >
-                        <Download size={14} />
-                        <span>PDF</span>
-                      </button>
-                      <button 
-                        onClick={() => handleDelete(bill.id, bill.billNo)}
-                        className="inline-flex items-center justify-center p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition border border-red-200"
-                        title="Delete Bill"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                    <div className="flex flex-col gap-2 items-center justify-center">
+                      <div className="flex space-x-2">
+                        <button 
+                          onClick={() => generateBillPDF(bill, company)}
+                          className="inline-flex items-center space-x-1 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg transition text-sm font-medium shadow-sm"
+                          title="Download PDF"
+                        >
+                          <Download size={14} />
+                          <span>PDF</span>
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(bill.id, bill.billNo)}
+                          className="inline-flex items-center justify-center p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition border border-red-200"
+                          title="Delete Bill"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+
+                      {bill.items.filter(i => i.vehicleInfo).map(item => (
+                         <button 
+                           key={`cert-${item.id}`}
+                           onClick={() => generateScrapCertificate(bill, item, company)}
+                           className="inline-flex w-[120px] justify-center items-center space-x-1.5 px-3 py-1.5 bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 rounded-lg transition-all text-xs font-semibold shadow-sm"
+                           title={`Certificate for ${item.vehicleInfo?.registrationNumber}`}
+                         >
+                           <Car size={12} />
+                           <span className="truncate">Cert: {item.vehicleInfo?.registrationNumber}</span>
+                         </button>
+                      ))}
                     </div>
                   </td>
                 </tr>

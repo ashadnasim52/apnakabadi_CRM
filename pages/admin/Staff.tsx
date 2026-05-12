@@ -51,7 +51,7 @@ export const Staff = () => {
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Staff Management</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-slate-800">Staff Management</h1>
           <p className="text-slate-500 mt-1">Manage employees, leaves, and expenses</p>
         </div>
         {activeTab === 'staff' && (
@@ -358,7 +358,7 @@ export const Staff = () => {
       {/* Add Staff Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
+          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-4 md:p-6">
             <h3 className="text-xl font-bold text-slate-800 mb-4">Add New Staff Member</h3>
             <form onSubmit={handleAddStaff} className="space-y-4">
               <div>

@@ -60,7 +60,7 @@ export const RateChart = () => {
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-           <h1 className="text-2xl font-bold text-slate-800">Rate Chart Management</h1>
+           <h1 className="text-xl md:text-2xl font-bold text-slate-800">Rate Chart Management</h1>
            <p className="text-slate-500 mt-1">Manage daily scrap buying rates</p>
         </div>
         
@@ -185,7 +185,7 @@ export const RateChart = () => {
       {/* Add Item Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-sm w-full p-6 animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-xl shadow-lg max-w-sm w-full p-4 md:p-6 animate-in fade-in zoom-in duration-200">
             <h3 className="text-xl font-bold text-slate-800 mb-4">Add New Item</h3>
             <form onSubmit={handleAddItem} className="space-y-4">
               <div>

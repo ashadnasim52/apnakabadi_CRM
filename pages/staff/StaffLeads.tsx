@@ -33,7 +33,7 @@ export const StaffLeads = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-800">My Leads</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-slate-800">My Leads</h1>
         <p className="text-slate-500 mt-1">Manage your assigned scrap collection tasks</p>
       </div>
 

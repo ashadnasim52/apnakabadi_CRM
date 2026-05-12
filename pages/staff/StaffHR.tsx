@@ -95,30 +95,30 @@ export const StaffHR = () => {
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-           <h1 className="text-2xl font-bold text-slate-800">My Profile & HR</h1>
+           <h1 className="text-xl md:text-2xl font-bold text-slate-800">My Profile & HR</h1>
            <p className="text-slate-500 mt-1">Manage leaves and expense claims</p>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-200">
+      <div className="flex border-b border-slate-200 overflow-x-auto no-scrollbar">
         <button 
           onClick={() => setActiveTab('attendance')}
-          className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${activeTab === 'attendance' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+          className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 whitespace-nowrap ${activeTab === 'attendance' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
         >
           <Fingerprint size={18} />
           Attendance
         </button>
         <button 
           onClick={() => setActiveTab('leaves')}
-          className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${activeTab === 'leaves' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+          className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 whitespace-nowrap ${activeTab === 'leaves' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
         >
           <Calendar size={18} />
           Leaves
         </button>
         <button 
           onClick={() => setActiveTab('expenses')}
-          className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${activeTab === 'expenses' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+          className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 whitespace-nowrap ${activeTab === 'expenses' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
         >
           <DollarSign size={18} />
           Reimbursements
@@ -126,8 +126,8 @@ export const StaffHR = () => {
       </div>
 
       {activeTab === 'attendance' && (
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center text-center space-y-4">
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center text-center space-y-4">
                 <div className="p-4 bg-blue-50 text-blue-600 rounded-full mb-2">
                     <Fingerprint size={48} />
                 </div>
@@ -200,7 +200,7 @@ export const StaffHR = () => {
       )}
 
       {activeTab === 'leaves' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
             {/* Who is absent today */}
             <div className="lg:col-span-3">
                  <div className="bg-orange-50 border border-orange-100 rounded-xl p-4 flex items-start gap-3">
@@ -225,7 +225,7 @@ export const StaffHR = () => {
             </div>
 
             {/* Apply Form */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 h-fit">
+            <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 h-fit">
                 <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
                     <Plus size={18} className="text-blue-600" /> Apply for Leave
                 </h3>
@@ -293,7 +293,7 @@ export const StaffHR = () => {
                                     </td>
                                 </tr>
                             )) : (
-                                <tr><td colSpan={4} className="p-6 text-center text-slate-400">No leave records found.</td></tr>
+                                <tr><td colSpan={4} className="p-4 md:p-6 text-center text-slate-400">No leave records found.</td></tr>
                             )}
                         </tbody>
                     </table>
@@ -303,9 +303,9 @@ export const StaffHR = () => {
       )}
 
       {activeTab === 'expenses' && (
-         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
             {/* Apply Expense Form */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 h-fit">
+            <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 h-fit">
                 <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
                     <Plus size={18} className="text-blue-600" /> Claim Reimbursement
                 </h3>
@@ -360,7 +360,7 @@ export const StaffHR = () => {
                                     </td>
                                 </tr>
                             )) : (
-                                <tr><td colSpan={4} className="p-6 text-center text-slate-400">No reimbursement records found.</td></tr>
+                                <tr><td colSpan={4} className="p-4 md:p-6 text-center text-slate-400">No reimbursement records found.</td></tr>
                             )}
                         </tbody>
                     </table>

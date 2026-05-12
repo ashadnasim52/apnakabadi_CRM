@@ -29,6 +29,7 @@ export const INITIAL_ITEMS: ScrapItem[] = [
   { id: '12', name: 'Aluminium', rate: 110, lastUpdated: getDate(1), category: 'Metal' },
   { id: '13', name: 'Brass', rate: 320, lastUpdated: getDate(1), category: 'Metal' },
   { id: '14', name: 'Copper (Armature)', rate: 650, lastUpdated: getDate(1), category: 'Metal' },
+  { id: '22', name: 'Scrap Vehicle (2/4 Wheeler)', rate: 15, lastUpdated: getDate(0), category: 'Vehicle' },
   { id: '15', name: 'Car Battery', rate: 75, lastUpdated: getDate(5), category: 'Others' },
   { id: '17', name: 'Silver Foil', rate: 20, lastUpdated: getDate(1), category: 'Metal' },
   { id: '18', name: 'Cardboard', rate: 8, lastUpdated: getDate(1), category: 'Paper' },

@@ -65,7 +65,7 @@ export const Reports = () => {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Business Reports</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-slate-800">Business Reports</h1>
           <p className="text-slate-500 mt-1">Generate sales and purchase summaries</p>
         </div>
         
@@ -143,7 +143,7 @@ export const Reports = () => {
                 <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
                     <TrendingDown size={24} />
                 </div>
-                <span className="text-2xl font-bold text-slate-800">₹{stats.purchase.toLocaleString()}</span>
+                <span className="text-xl md:text-2xl font-bold text-slate-800">₹{stats.purchase.toLocaleString()}</span>
             </div>
         </div>
 
@@ -153,7 +153,7 @@ export const Reports = () => {
                 <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
                     <TrendingUp size={24} />
                 </div>
-                <span className="text-2xl font-bold text-slate-800">₹{stats.sale.toLocaleString()}</span>
+                <span className="text-xl md:text-2xl font-bold text-slate-800">₹{stats.sale.toLocaleString()}</span>
             </div>
         </div>
 
@@ -163,7 +163,7 @@ export const Reports = () => {
                 <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
                     <DollarSign size={24} />
                 </div>
-                <span className={`text-2xl font-bold ${stats.net >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <span className={`text-xl md:text-2xl font-bold ${stats.net >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     ₹{stats.net.toLocaleString()}
                 </span>
             </div>
@@ -175,7 +175,7 @@ export const Reports = () => {
                 <div className="p-2 bg-purple-50 text-purple-600 rounded-lg">
                     <FileText size={24} />
                 </div>
-                <span className="text-2xl font-bold text-slate-800">{stats.count}</span>
+                <span className="text-xl md:text-2xl font-bold text-slate-800">{stats.count}</span>
             </div>
         </div>
       </div>

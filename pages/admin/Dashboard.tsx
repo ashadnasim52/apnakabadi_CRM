@@ -40,17 +40,17 @@ export const Dashboard = () => {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
+      <h1 className="text-xl md:text-2xl font-bold text-slate-800">Dashboard</h1>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Total Expenses (Purchase) */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-slate-500">Total Expenses (Buy)</p>
-              <h3 className="text-2xl font-bold text-slate-800 mt-2">₹{totalPurchasedValue.toLocaleString()}</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-slate-800 mt-2">₹{totalPurchasedValue.toLocaleString()}</h3>
               <p className="text-xs text-slate-400 mt-1">+₹{todayPurchased.toLocaleString()} today</p>
             </div>
             <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
@@ -60,11 +60,11 @@ export const Dashboard = () => {
         </div>
 
         {/* Total Revenue (Sales) */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-slate-500">Total Revenue (Sell)</p>
-              <h3 className="text-2xl font-bold text-emerald-600 mt-2">₹{totalSalesValue.toLocaleString()}</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-emerald-600 mt-2">₹{totalSalesValue.toLocaleString()}</h3>
               <p className="text-xs text-slate-400 mt-1">+₹{todaySales.toLocaleString()} today</p>
             </div>
             <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
@@ -74,11 +74,11 @@ export const Dashboard = () => {
         </div>
 
         {/* Profit Estimate (Simple calc) */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-slate-500">Net Cash Flow</p>
-              <h3 className={`text-2xl font-bold mt-2 ${totalSalesValue - totalPurchasedValue >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <h3 className={`text-xl md:text-2xl font-bold mt-2 ${totalSalesValue - totalPurchasedValue >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 ₹{(totalSalesValue - totalPurchasedValue).toLocaleString()}
               </h3>
             </div>
@@ -89,11 +89,11 @@ export const Dashboard = () => {
         </div>
 
         {/* Total Bills */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-slate-500">Transactions</p>
-              <h3 className="text-2xl font-bold text-slate-800 mt-2">{bills.length}</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-slate-800 mt-2">{bills.length}</h3>
               <p className="text-xs text-slate-400 mt-1">Mixed (Sale/Purchase)</p>
             </div>
             <div className="p-2 bg-orange-50 text-orange-600 rounded-lg">
@@ -103,9 +103,9 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Chart */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="lg:col-span-2 bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
           <h3 className="text-lg font-bold text-slate-800 mb-4">Cash Flow Overview</h3>
           <div className="h-64">
              <ResponsiveContainer width="100%" height="100%">
@@ -125,7 +125,7 @@ export const Dashboard = () => {
 
         {/* Quick Links & Warnings */}
         <div className="space-y-6">
-           <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+           <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
               <h3 className="text-lg font-bold text-slate-800 mb-4">Quick Actions</h3>
               <div className="space-y-3">
                  <Link to="/admin/rates" className="block w-full py-3 px-4 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-700 font-medium transition text-center border border-slate-200">
@@ -137,7 +137,7 @@ export const Dashboard = () => {
               </div>
            </div>
 
-           <div className="bg-amber-50 p-6 rounded-xl border border-amber-200">
+           <div className="bg-amber-50 p-4 md:p-6 rounded-xl border border-amber-200">
              <div className="flex items-center space-x-3 mb-2">
                <AlertCircle className="text-amber-600" size={24} />
                <h3 className="text-lg font-bold text-amber-800">Note</h3>

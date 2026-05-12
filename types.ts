@@ -90,6 +90,13 @@ export interface CompanySettings {
   signatureUrl: string | null; // Base64 string for demo
 }
 
+export interface VehicleInfo {
+  vehicleName: string;
+  registrationNumber: string;
+  chassisNumber: string;
+  engineNumber: string;
+}
+
 export interface BillItem {
   id: string; // unique row id
   itemId: string; // ref to ScrapItem
@@ -99,6 +106,7 @@ export interface BillItem {
   weight: number;
   totalWeight: number;
   amount: number;
+  vehicleInfo?: VehicleInfo;
 }
 
 export type TransactionType = 'PURCHASE' | 'SALE';

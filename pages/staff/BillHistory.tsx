@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { Download, Search, ArrowDownLeft, ArrowUpRight, FileText, Lock } from 'lucide-react';
-import { generateBillPDF } from '../../utils/pdfGenerator';
+import { Download, Search, ArrowDownLeft, ArrowUpRight, FileText, Lock, FileDown, Car } from 'lucide-react';
+import { generateBillPDF, generateScrapCertificate } from '../../utils/pdfGenerator';
 import { WhatsAppIcon } from '../../components/WhatsAppIcon';
 
 export const BillHistory = () => {
@@ -21,7 +21,7 @@ export const BillHistory = () => {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-           <h1 className="text-2xl font-bold text-slate-800">Bills History</h1>
+           <h1 className="text-xl md:text-2xl font-bold text-slate-800">Bills History</h1>
            <p className="text-slate-500 mt-1">View and download past transactions</p>
         </div>
         
@@ -39,7 +39,7 @@ export const BillHistory = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[900px]">
+          <table className="w-full text-left border-collapse min-w-[500px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
                 <th className="p-4 font-semibold">Bill No</th>
@@ -103,14 +103,26 @@ export const BillHistory = () => {
                     <td className={`p-4 text-right font-bold ${bill.transactionType === 'PURCHASE' ? 'text-blue-600' : 'text-emerald-600'}`}>
                       ₹{bill.totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="p-4 text-center">
+                    <td className="p-4 flex flex-col gap-2 items-end">
                       <button 
                         onClick={() => generateBillPDF(bill, company)}
-                        className="inline-flex items-center space-x-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all text-sm font-medium border border-slate-200 shadow-sm active:scale-95"
+                        className="inline-flex w-full justify-center items-center space-x-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all text-xs font-medium border border-slate-200 shadow-sm active:scale-95"
                       >
-                        <Download size={16} />
-                        <span className="hidden lg:inline">PDF</span>
+                        <Download size={14} />
+                        <span>Invoice</span>
                       </button>
+                      
+                      {bill.items.filter(i => i.vehicleInfo).map(item => (
+                         <button 
+                           key={`cert-${item.id}`}
+                           onClick={() => generateScrapCertificate(bill, item, company)}
+                           className="inline-flex w-full justify-center items-center space-x-1.5 px-3 py-2 bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 rounded-lg transition-all text-[10px] font-bold shadow-sm active:scale-95"
+                           title={`Download Certificate for ${item.vehicleInfo?.registrationNumber}`}
+                         >
+                           <Car size={12} />
+                           <span>Cert ({item.vehicleInfo?.registrationNumber})</span>
+                         </button>
+                      ))}
                     </td>
                   </tr>
                 );

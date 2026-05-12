@@ -140,7 +140,13 @@ export const generateBillPDF = (bill: Bill, company: CompanySettings, action: 'd
   let totalWeight = 0;
 
   bill.items.forEach((item, index) => {
-    const itemName = item.itemName || item.customName || 'Item';
+    let itemName = item.itemName || item.customName || 'Item';
+    
+    if (item.vehicleInfo) {
+      itemName += `\nVehicle: ${item.vehicleInfo.vehicleName} | Reg: ${item.vehicleInfo.registrationNumber}`;
+      if (item.vehicleInfo.chassisNumber) itemName += ` | Chassis: ${item.vehicleInfo.chassisNumber}`;
+      if (item.vehicleInfo.engineNumber) itemName += ` | Engine: ${item.vehicleInfo.engineNumber}`;
+    }
     
     // Auto wrap text
     const maxNameWidth = 60;
@@ -258,6 +264,92 @@ export const generateBillPDF = (bill: Bill, company: CompanySettings, action: 'd
   } else {
     doc.save(`${bill.transactionType}_${bill.billNo}.pdf`);
   }
+};
+
+export const generateScrapCertificate = (bill: Bill, item: any, company: CompanySettings) => {
+  const doc = new jsPDF({
+    orientation: 'landscape',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const margin = 20;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  
+  // Add a nice border
+  doc.setDrawColor(37, 99, 235);
+  doc.setLineWidth(2);
+  doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+  
+  // Design Elements
+  doc.setFontSize(28);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(37, 99, 235); // Blue
+  doc.text('VEHICLE SCRAPPING CERTIFICATE', pageWidth / 2, 40, { align: 'center' });
+  
+  doc.setFontSize(18);
+  doc.setTextColor(50, 50, 50);
+  doc.text(company.name.toUpperCase(), pageWidth / 2, 52, { align: 'center' });
+
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Certificate No: SCRAP-${bill.billNo}-${item.id.slice(-4)}`, margin + 10, 70);
+  doc.text(`Date of Scrapping: ${new Date(bill.date).toLocaleDateString()}`, pageWidth - margin - 10, 70, { align: 'right' });
+
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.line(margin + 10, 78, pageWidth - margin - 10, 78);
+
+  doc.setFontSize(14);
+  doc.text('This is to certify that the following vehicle has been purchased for scrapping', margin + 10, 95);
+  doc.text(`by ${company.name} from:`, margin + 10, 103);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text(`Customer Name: ${bill.customerName}`, margin + 10, 115);
+  doc.setFont('helvetica', 'normal');
+  
+  if (item.vehicleInfo) {
+    const vY = 135;
+    
+    // Background box for vehicle info
+    doc.setFillColor(248, 250, 252);
+    doc.rect(margin + 10, vY - 10, 150, 50, 'F');
+    doc.setDrawColor(226, 232, 240);
+    doc.rect(margin + 10, vY - 10, 150, 50, 'S');
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Vehicle Details:', margin + 15, vY - 2);
+    doc.setFont('helvetica', 'normal');
+
+    doc.text(`Vehicle Name: ${item.vehicleInfo.vehicleName}`, margin + 15, vY + 8);
+    doc.text(`Registration No: ${item.vehicleInfo.registrationNumber}`, margin + 15, vY + 16);
+    doc.text(`Chassis No: ${item.vehicleInfo.chassisNumber}`, margin + 15, vY + 24);
+    doc.text(`Engine No: ${item.vehicleInfo.engineNumber}`, margin + 15, vY + 32);
+  }
+
+  doc.setFontSize(12);
+  const disclaimerY = 160;
+  doc.text('The above vehicle has been handed over for safe dismantling and scrapping in accordance', margin + 10, disclaimerY);
+  doc.text('with environmental regulations. This certificate is issued for record purposes.', margin + 10, disclaimerY + 8);
+
+  // Signatures
+  const sigY = pageHeight - 35;
+  doc.setDrawColor(100);
+  doc.line(margin + 10, sigY, margin + 70, sigY);
+  doc.line(pageWidth - margin - 70, sigY, pageWidth - margin - 10, sigY);
+
+  doc.setFontSize(11);
+  doc.text('Customer Signature', margin + 40, sigY + 6, { align: 'center' });
+  doc.setFontSize(9);
+  doc.text(bill.customerName, margin + 40, sigY + 12, { align: 'center' });
+
+  doc.setFontSize(11);
+  doc.text('Authorized Signatory', pageWidth - margin - 40, sigY + 6, { align: 'center' });
+  doc.setFontSize(9);
+  doc.text(company.name, pageWidth - margin - 40, sigY + 12, { align: 'center' });
+
+  doc.save(`Scrap_Certificate_${item.vehicleInfo?.registrationNumber || item.id}.pdf`);
 };
 
 export const generateSummaryReportPDF = (bills: Bill[], company: CompanySettings, startDate: string, endDate: string) => {

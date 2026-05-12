@@ -45,37 +45,37 @@ export const Salary = () => {
   const totalAdvanceGiven = thisMonthPayments.filter(p => p.type === 'Advance').reduce((sum, p) => sum + p.amount, 0);
 
   return (
-    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
       
       {/* Title & Stats */}
       <div className="lg:col-span-3">
-        <h1 className="text-2xl font-bold text-slate-800">Payroll & Salary</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-slate-800">Payroll & Salary</h1>
         <p className="text-slate-500 mt-1">Manage staff salaries, advances, and bonuses</p>
       </div>
 
       <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+         <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
            <div>
              <p className="text-slate-500 text-sm font-medium">Salary Paid (This Month)</p>
-             <h3 className="text-2xl font-bold text-slate-800">₹{totalSalaryPaid.toLocaleString()}</h3>
+             <h3 className="text-xl md:text-2xl font-bold text-slate-800">₹{totalSalaryPaid.toLocaleString()}</h3>
            </div>
            <div className="bg-green-100 p-3 rounded-full text-green-600">
              <IndianRupee size={24} />
            </div>
          </div>
-         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+         <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
            <div>
              <p className="text-slate-500 text-sm font-medium">Advance Given (This Month)</p>
-             <h3 className="text-2xl font-bold text-orange-600">₹{totalAdvanceGiven.toLocaleString()}</h3>
+             <h3 className="text-xl md:text-2xl font-bold text-orange-600">₹{totalAdvanceGiven.toLocaleString()}</h3>
            </div>
            <div className="bg-orange-100 p-3 rounded-full text-orange-600">
              <Banknote size={24} />
            </div>
          </div>
-         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+         <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
            <div>
              <p className="text-slate-500 text-sm font-medium">Total Staff</p>
-             <h3 className="text-2xl font-bold text-blue-600">{activeStaff.length}</h3>
+             <h3 className="text-xl md:text-2xl font-bold text-blue-600">{activeStaff.length}</h3>
            </div>
            <div className="bg-blue-100 p-3 rounded-full text-blue-600">
              <User size={24} />
@@ -85,7 +85,7 @@ export const Salary = () => {
 
       {/* Payment Form */}
       <div className="lg:col-span-1">
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 sticky top-4">
+        <form onSubmit={handleSubmit} className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 sticky top-4">
           <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center">
             <Plus className="mr-2 text-blue-600" size={20}/>
             Record New Payment

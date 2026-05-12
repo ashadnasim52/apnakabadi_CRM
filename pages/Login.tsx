@@ -26,12 +26,12 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-[100dvh] bg-slate-900 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-2 bg-blue-600"></div>
         
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-slate-800">{company.name}</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-slate-800">{company.name}</h1>
           <p className="text-slate-500 mt-2">Scrap Management System</p>
         </div>
 

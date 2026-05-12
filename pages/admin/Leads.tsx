@@ -115,7 +115,7 @@ export const Leads = () => {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-           <h1 className="text-2xl font-bold text-slate-800">Lead Management</h1>
+           <h1 className="text-xl md:text-2xl font-bold text-slate-800">Lead Management</h1>
            <p className="text-slate-500 mt-1">Track potential scrap sources and assign to staff</p>
         </div>
         
@@ -156,7 +156,7 @@ export const Leads = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[800px]">
+          <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
                 <th className="p-4 font-semibold">Lead Details</th>
@@ -227,7 +227,7 @@ export const Leads = () => {
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-lg w-full p-6">
+          <div className="bg-white rounded-xl shadow-lg max-w-lg w-full p-4 md:p-6">
             <h3 className="text-xl font-bold text-slate-800 mb-4">
               {editingId ? 'Edit Lead Details' : 'Create New Lead'}
             </h3>

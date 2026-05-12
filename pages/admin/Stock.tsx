@@ -39,7 +39,7 @@ export const Stock = () => {
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Stock Inventory</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-slate-800">Stock Inventory</h1>
           <p className="text-slate-500 mt-1">Real-time overview of available materials based on bills</p>
         </div>
         
@@ -54,7 +54,7 @@ export const Stock = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[700px]">
+          <table className="w-full text-left border-collapse min-w-[500px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
                 <th className="p-4 font-semibold">Item Name</th>
