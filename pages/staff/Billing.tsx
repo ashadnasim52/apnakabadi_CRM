@@ -67,7 +67,7 @@ export const Billing = () => {
   // Derived state
   const selectedItemData = items.find(i => i.id === selectedItemId);
   const isOthers = selectedItemData?.name === 'Others' || selectedItemData?.category === 'Others';
-  const isVehicleItem = !!selectedItemData && (selectedItemData.name.toLowerCase().includes('vehicle') || selectedItemData.name.toLowerCase().includes('car') && !selectedItemData.name.toLowerCase().includes('battery') || selectedItemData.name.toLowerCase().includes('bike') || selectedItemData.name.toLowerCase().includes('truck'));
+  const isVehicleItem = !!selectedItemData && (selectedItemData.category === 'Vehicle' || /\b(vehicle|car|bike|truck)\b/i.test(selectedItemData.name) && !/battery/i.test(selectedItemData.name));
   
   // Rate Logic: Purchase = Fixed Admin Rate, Sale = Manual/Negotiated Rate (Default to Admin Rate)
   const activeRate = transactionType === 'SALE' && manualRate !== ''
@@ -479,11 +479,11 @@ export const Billing = () => {
                     </div>
 
                     {/* Vehicle Details Form */}
-                    {isVehicleItem && transactionType === 'PURCHASE' && (
+                    {isVehicleItem && (
                         <div className="col-span-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-lg border border-slate-200 mt-2">
                             <div className="col-span-1 sm:col-span-2 md:col-span-4 mt-2 mb-1 flex items-center text-slate-600">
                                 <Car size={16} className="mr-2 text-blue-500" />
-                                <span className="text-sm font-semibold">Vehicle Details Required</span>
+                                <span className="text-sm font-semibold">Vehicle Details Required {(transactionType === 'SALE' && '(For Stock Out)') || ''}</span>
                             </div>
                             <div>
                                 <label className="block text-xs text-slate-600 mb-1 font-medium">Vehicle Name *</label>

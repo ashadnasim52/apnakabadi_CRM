@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { StockItem } from '../../types';
-import { Plus, ArrowDownLeft, ArrowUpRight, AlertCircle } from 'lucide-react';
+import { StockItem, BillItem } from '../../types';
+import { Plus, ArrowDownLeft, ArrowUpRight, AlertCircle, Car } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const Stock = () => {
@@ -34,6 +34,30 @@ export const Stock = () => {
       available: purchased - sold
     };
   }).sort((a, b) => b.available - a.available);
+  
+  // Extract all distinct purchased vehicles
+  const purchasedVehicles: { billDate: string, billNo: string, item: BillItem }[] = [];
+  bills.filter(b => b.transactionType === 'PURCHASE').forEach(b => {
+    b.items.forEach(bi => {
+      if (bi.vehicleInfo && bi.vehicleInfo.registrationNumber) {
+        purchasedVehicles.push({ billDate: b.date, billNo: b.billNo, item: bi });
+      }
+    });
+  });
+
+  // Extract all distinct sold vehicles based on registration number
+  const soldVehicleRegs = new Set<string>();
+  bills.filter(b => b.transactionType === 'SALE').forEach(b => {
+    b.items.forEach(bi => {
+      if (bi.vehicleInfo && bi.vehicleInfo.registrationNumber) {
+        soldVehicleRegs.add(bi.vehicleInfo.registrationNumber.toLowerCase().trim());
+      }
+    });
+  });
+  
+  const inStockVehicles = purchasedVehicles.filter(
+    pv => !soldVehicleRegs.has(pv.item.vehicleInfo!.registrationNumber.toLowerCase().trim())
+  );
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -53,6 +77,9 @@ export const Stock = () => {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="p-4 border-b border-slate-200 bg-slate-50 flex items-center gap-2">
+            <h2 className="font-semibold text-slate-800">Overall View</h2>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[500px]">
             <thead>
@@ -110,6 +137,53 @@ export const Stock = () => {
           </table>
         </div>
       </div>
+      
+      {inStockVehicles.length > 0 && (
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <Car size={18} className="text-blue-500" />
+                    <h2 className="font-semibold text-slate-800">Vehicles Current In Stock</h2>
+                </div>
+                <div className="text-sm text-slate-500 font-medium bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+                    Total: {inStockVehicles.length}
+                </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[600px]">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
+                    <th className="p-4 font-semibold">Reg. No</th>
+                    <th className="p-4 font-semibold">Vehicle</th>
+                    <th className="p-4 font-semibold">Purchase Info</th>
+                    <th className="p-4 font-semibold">Chassis / Engine</th>
+                    <th className="p-4 font-semibold text-right">Purchase Amt</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {inStockVehicles.map((pv, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 font-bold text-slate-700">{pv.item.vehicleInfo?.registrationNumber}</td>
+                        <td className="p-4 font-medium text-slate-800">{pv.item.vehicleInfo?.vehicleName}</td>
+                        <td className="p-4">
+                            <span className="text-sm font-semibold">{pv.billNo}</span>
+                            <div className="text-xs text-slate-500 mt-0.5">{new Date(pv.billDate).toLocaleDateString()}</div>
+                        </td>
+                        <td className="p-4 text-sm text-slate-600">
+                            {pv.item.vehicleInfo?.chassisNumber ? <div>Chassis: {pv.item.vehicleInfo.chassisNumber}</div> : null}
+                            {pv.item.vehicleInfo?.engineNumber ? <div>Engine: {pv.item.vehicleInfo.engineNumber}</div> : null}
+                            {!pv.item.vehicleInfo?.chassisNumber && !pv.item.vehicleInfo?.engineNumber && <span className="text-slate-400">Not provided</span>}
+                        </td>
+                        <td className="p-4 text-right font-mono text-slate-600">
+                            ₹{pv.item.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                        </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+      )}
     </div>
   );
 };
